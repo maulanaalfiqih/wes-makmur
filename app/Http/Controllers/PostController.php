@@ -22,7 +22,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post/tambah');
+        $kategori = Kategori::all();
+        return view('post/tambah', compact('kategori'));
     }
 
     /**
