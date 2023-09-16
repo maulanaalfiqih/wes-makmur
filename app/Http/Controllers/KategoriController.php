@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -11,7 +12,8 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        //
+        $data = Kategori::all();
+        return view('kategori/tampil', compact('data'));
     }
 
     /**
@@ -19,7 +21,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        //
+        return view('kategori/tambah');
     }
 
     /**
@@ -27,7 +29,13 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = $request->validate([
+            'nama_kategori' => 'required',
+            'deskripsi_kategori' => 'required'
+        ]);
+
+        Kategori::create($validator);
+        return redirect('kategori')->with('success', 'Data berhasil diinput');
     }
 
     /**
@@ -43,7 +51,8 @@ class KategoriController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = Kategori::find($id);
+        return view('kategori/edit', compact('data'));
     }
 
     /**
@@ -51,7 +60,14 @@ class KategoriController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = Kategori::find($id);
+        $validator = $request->validate([
+            'nama_kategori' => 'required',
+            'deskripsi_kategori' => 'required'
+        ]);
+
+        $data->update($validator);
+        return redirect('kategori')->with('success', 'Data berhasil diubah');
     }
 
     /**
@@ -59,6 +75,8 @@ class KategoriController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = Kategori::find($id);
+        $data->delete();
+        return redirect('kategori')->with('success', 'Data berhasil dihapus');
     }
 }

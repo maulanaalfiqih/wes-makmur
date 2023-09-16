@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +20,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::middleware(['auth', 'multiuser'])->group(function () {
+    Route::resource('kategori', KategoriController::class);
+    Route::resource('post', PostController::class);
+    Route::resource('produk', ProdukController::class);
+    Route::resource('users', UserController::class);
 });
 
 Auth::routes();

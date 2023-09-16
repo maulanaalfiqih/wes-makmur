@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
@@ -11,7 +13,8 @@ class ProdukController extends Controller
      */
     public function index()
     {
-        //
+        $data = Produk::all();
+        return view('produk/tampil', compact('data'));
     }
 
     /**
@@ -19,7 +22,7 @@ class ProdukController extends Controller
      */
     public function create()
     {
-        //
+        return view('produk/tambah');
     }
 
     /**
@@ -27,7 +30,16 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = $request->validate([
+            'nama_produk' => 'required',
+            'foto' => 'required',
+            'harga' => 'required',
+            'deskripsi_produk' => 'required',
+            'kategori_id' => 'required'
+        ]);
+
+        Produk::create($validator);
+        return redirect('produk')->with('success', 'Data berhasil diinput');
     }
 
     /**
@@ -43,7 +55,9 @@ class ProdukController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = Produk::find($id);
+        $kategori = Kategori::all();
+        return view('produk/edit', compact('data', 'kategori'));
     }
 
     /**
@@ -51,7 +65,16 @@ class ProdukController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = Produk::find($id);
+        $validator = $request->validate([
+            'nama_produk' => 'required',
+            'foto' => 'required',
+            'harga' => 'required',
+            'deskripsi_produk' => 'required',
+            'kategori_id' => 'required'
+        ]);
+        $data->update($validator);
+        return redirect('produk')->with('success', 'Data berhasil diubah');
     }
 
     /**
@@ -59,6 +82,8 @@ class ProdukController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = Produk::find($id);
+        $data->delete();
+        return redirect('produk')->with('success', 'Data berhasil dihapus');
     }
 }
